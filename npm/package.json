@@ -1,0 +1,18 @@
+{
+  "name": "@wednesday-gloth/gloth-api-client",
+  "private": false,
+  "license": "GPL-3.0-or-later",
+  "version": "0.0.8",
+  "repository": "https://github.com/wednesday-gloth/gloth-openapi",
+  "author": "Wednesday Gloth",
+  "devDependencies": {
+    "openapi-typescript": "^3.0.1",
+    "openapi-typescript-codegen": "^0.8.1",
+    "prettier": "^2.3.1"
+  },
+  "scripts": {
+    "prettier:generated": "prettier --write \"client/**/*.ts\"",
+    "generate:client": "openapi -i ../api.yaml -o client --useUnionTypes  && yarn prettier:generated",
+    "publish:client": "sh scripts/publish.sh"
+  }
+}

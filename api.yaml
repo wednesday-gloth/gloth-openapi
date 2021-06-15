@@ -1,0 +1,170 @@
+openapi: 3.0.0
+info:
+  title: Gloth API
+  version: 1.0.0
+paths:
+  /list_languages:
+    get:
+      operationId: listLanguages
+      tags:
+        - language
+      responses:
+        '200':
+          description: Array of supported Languages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListLanguagesResponse'
+  /list_dictionaries:
+    get:
+      operationId: listDictionaries
+      tags:
+        - dictionary
+      responses:
+        '200':
+          description: Array of user Dictionaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListDictionariesResponse'
+  /list_dictionary_records:
+    get:
+      operationId: listDictionaryRecords
+      tags:
+        - dictionary
+      parameters:
+        - name: dictionaryId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Array of Dictionary Records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ListDictionaryRecordsResponse'
+components:
+  schemas:
+    Response:
+      type: object
+      properties:
+        trackingId:
+          type: string
+      required:
+        - trackingId
+    Language:
+      type: object
+      properties:
+        code:
+          type: string
+        emojiCode:
+          type: string
+        name:
+          type: string
+      required:
+        - code
+        - emojiCode
+        - name
+    ListLanguagesResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                language:
+                  $ref: '#/components/schemas/Language'
+              required:
+                - language
+          required:
+            - data
+    Dictionary:
+      type: object
+      properties:
+        id:
+          type: integer
+        sourceLangCode:
+          type: string
+        targetLangCode:
+          type: string
+      required:
+        - id
+        - sourceLangCode
+        - targetLangCode
+    ListDictionariesResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                dictionaries:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Dictionary'
+                languages:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Language'
+              required:
+                - dictionaries
+                - languages
+          required:
+            - data
+    Word:
+      type: object
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        langCode:
+          type: string
+        startPoint:
+          type: string
+          format: date-time
+      required:
+        - id
+        - content
+        - langCode
+        - startPoint
+    DictionaryRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        words:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+        lastUpdate:
+          type: string
+          format: date-time
+      required:
+        - id
+        - words
+        - lastUpdate
+    ListDictionaryRecordsResponse:
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                dictionaryRecords:
+                  $ref: '#/components/schemas/DictionaryRecord'
+              required:
+                - dictionaryRecords
+          required:
+            - data
